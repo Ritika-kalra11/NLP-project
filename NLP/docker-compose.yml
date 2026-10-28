@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: researchai-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - RESEARCHAI_ENV=production
+      - DEMO_MODE=true
+      - PORT=8000
+      - HOST=0.0.0.0
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: researchai-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
